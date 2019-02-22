@@ -44,13 +44,13 @@
             return {
                 collapse: false,
                 fullscreen: false,
-                name: 'linxin',
+                name: '',
                 message: 2
             }
         },
         computed:{
             username(){
-                let username = localStorage.getItem('ms_username');
+                let username = localStorage.getItem('userName');
                 return username ? username : this.name;
             }
         },
@@ -58,7 +58,8 @@
             // 用户名下拉菜单选择事件
             handleCommand(command) {
                 if(command == 'loginout'){
-                    localStorage.removeItem('ms_username');
+                    localStorage.removeItem('roleId');
+                    // localStorage.removeItem('userName');
                     this.$router.push('/login');
                 }
             },
@@ -97,9 +98,10 @@
             }
         },
         mounted(){
-            if(document.body.clientWidth < 1500){
-                this.collapseChage();
-            }
+
+          if(document.body.clientWidth < 1500){
+            this.collapseChage();
+          }
         }
     }
 </script>

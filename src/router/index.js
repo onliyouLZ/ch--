@@ -18,18 +18,24 @@ export default new Router({
         {
           path: '/dashboard',
           component: resolve => require(['../components/page/Dashboard.vue'], resolve),
-          meta: { title: '主页',permission:true}
+          meta: { title: '系统首页',permission:true}
         },
         {
-          path: '/403',
-          component: resolve => require(['../components/page/403.vue'], resolve),
-          meta: { title: '403' }
-        }
+          path: '/role',
+          component: resolve => require(['../components/page/role.vue'], resolve),
+          meta: { title: '角色管理',permission:true}
+        },
+
       ]
     },
     {
       path: '/login',
       component: resolve => require(['../components/page/Login.vue'], resolve)
+    },
+    {
+      path: '/403',
+      component: resolve => require(['../components/page/403.vue'], resolve),
+      meta: { title: '403' }
     },
     {
       path: '*',
