@@ -59,7 +59,10 @@
         this.$http.get("http://localhost:3000/roles").then(res=>{
           if(res.status===200){
             let data=res.data;
-            this.tableData=data;
+            setTimeout(()=>{
+              this.tableData=data;
+              this.loading=false;
+            },500)
           }
         })
       },
@@ -71,9 +74,7 @@
       }
     },
     mounted(){
-      setTimeout(()=>{
-        this.loading=false;
-      },500)
+
     },
     created(){
       this.search();
