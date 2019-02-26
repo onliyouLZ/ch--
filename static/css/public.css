@@ -10,3 +10,41 @@ label{
 .wh150{
   width: 175px;
 }
+.wh100{
+  width: 100%;
+  height: 100%;
+}
+
+/**表格**/
+.table-button{
+  padding-left: 5px;
+  border-top: 1px solid #ebeef5;
+  border-left: 1px solid #ebeef5;
+  border-right: 1px solid #ebeef5;
+  background: linear-gradient(to top, #dbdada 0%,#E5E5E5 10%, #efeeee 100%,#ffffff)
+}
+.table-header-public{
+  font-size: 13px;
+  color: #666666;
+  /*text-align: center!important;*/
+  border-color: #ddd!important;
+  background: linear-gradient(to top, #dbdada 0%,#E5E5E5 10%, #efeeee 100%,#ffffff)
+}
+.table-footer{
+  min-height: 44px;
+  box-sizing: border-box;
+  padding: 8px 10px;
+}
+.table-choice{
+  float: left;
+}
+
+
+/**饿了么样式修改**/
+.el-card__body{
+  box-sizing: border-box;
+}
+.el-pagination{
+  float: left;
+  padding: 0!important;
+}
