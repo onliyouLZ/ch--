@@ -39,8 +39,12 @@
 
 
 <script>
+  import tableNormal from '../common/tableNormal'
   export default{
     name: "role",
+    components:{
+      tableNormal
+    },
     data(){
       return{
         loading:true,

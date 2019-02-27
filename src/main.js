@@ -8,14 +8,16 @@ import axios from 'axios'
 import $ from 'jquery'
 
 import ElementUI from 'element-ui';
+import utlis from './utils/utils'
 import 'element-ui/lib/theme-chalk/index.css';    // 默认主题
+
 // import '../static/css/theme-green/index.css';       // 浅绿色主题
 
 import Cookies from 'js-cookie'
 
+
 Vue.config.productionTip = false;
 Vue.use(ElementUI, { size: 'small' });
-
 /**
  * 简单的axios封装
  * @type {boolean}
@@ -28,6 +30,7 @@ axios.defaults.withCredentials=true;//让ajax携带cookie
 
 
 Vue.prototype.$http = axios;
+
 
 
 

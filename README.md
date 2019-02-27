@@ -1,9 +1,10 @@
 # vue-manage-system #
 基于Vue.js 2.x系列 + Element UI 的后台管理系统解决方案。[线上地址](http://blog.gdfengshuo.com/example/work/)
 
-## 赞赏
-请作者喝杯咖啡吧！
-
+## 项目引入插件 ##
+1.字体图标库 阿里巴巴矢量图库、Font Awesome 字体图标库 [线上地址](http://fontawesome.dashgame.com/)
+2.导出excel Export2Excel 使用方法详见博客 [地址](https://blog.csdn.net/weixin_40043172/article/details/87969774)
+3.本项目启用store状态管理 仅存储了登录用户名以及角色id 剩下自己根据项目扩展
 
 ## 功能 ##
 - [x] Element UI

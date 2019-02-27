@@ -19,22 +19,24 @@
           </el-date-picker>
         </div>
         <div class="card-header-titleCard">
-          <el-button  type="primary">查询</el-button>
-          <el-button  type="success">导出</el-button>
+          <el-button  type="primary" @click="primary">查询</el-button>
+          <el-button  type="success" v-if="exports" @click="exportExcel(tableData,multipleSelection)">导出</el-button>
         </div>
       </div>
       <div class="table-button" v-show="buttonShow">
-        <el-button type="text" icon="fa  fa-plus" >新增</el-button>
-        <el-button type="text" icon="fa fa-trash-o">删除</el-button>
+        <el-button type="text" class="el-icon-button" icon="fa  fa-plus">新增</el-button>
+        <el-button type="text" class="el-icon-button" icon="fa fa-trash-o">删除</el-button>
       </div>
       <el-table
         :data="tables"
         border
         ref="multipleTable"
         style="width: 100%"
+        :height=tableHeight
         @row-click="rowClick"
         @selection-change="handleSelectionChange"
-        header-cell-class-name="table-header-public">
+        header-cell-class-name="table-header-public"
+        :span-method="merge===true ? objectSpanMethod:''">
         <template v-for="item in tableHeader">
           <el-table-column
             v-if="item.type==='selection'"
@@ -48,21 +50,38 @@
             :label="item.label"
             align="center">
           </el-table-column>
+          <!--是否开启行内按钮-->
+          <template
+          v-if="operation===true">
+            <el-table-column
+              v-if="item.type==='operation'"
+              :prop="item.prop"
+              :label="item.label"
+              align="center">
+              <template slot-scope="scope">
+                <el-button
+                  size="mini"
+                >编辑</el-button>
+                <el-button
+                  size="mini"
+                  type="danger"
+                >删除</el-button>
+              </template>
+            </el-table-column>
+          </template>
         </template>
       </el-table>
-
-
       <div class="table-footer" v-if="tableData.length>0">
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
-          :current-page="currentPage4"
+          :current-page="currentPage"
           :page-sizes="[20,40,60]"
           :page-size="5"
           layout="total, sizes, prev, pager, next, jumper"
           :total="total">
         </el-pagination>
-        <div class="table-choice" v-if="multipleSelection.length>0"><span>当前页选中:{{multipleSelection.length > 0 ? multipleSelection.length+"条" : " "}}</span></div>
+        <div class="table-choice" v-if="multipleSelection.length>0">当前页面选中:{{multipleSelection.length > 0 ? multipleSelection.length+"条" : " "}}</div>
       </div>
     </el-card>
   </div>
@@ -71,28 +90,16 @@
 
 <script>
   export default {
-    name:"tableNormalz",
+    name:"tableNormal",
     data(){
       return{
         inputValue:"",
         multipleSelection:[],
-        pageSize: 10, // 每页大小默认值
-        pageIndex: 1, // 默认第一页
-        currentPage4: 1,//当前显示第几页
         loading:true,
-        times:new Date()
+        times: [new Date().datePro('{%d-1}').formatDate('yyyy-MM-dd HH:ss:mm'), new Date().formatDate('yyyy-MM-dd HH:ss:mm')],
       }
     },
     props:{
-      tableHeader:{
-        type:Array,
-        default:[
-          {data:'',title:'',type:"selection"},
-          {prop:"date",label:"创建时间",type:"normal"},
-          {prop:"roleName",label:"角色名称",type:"normal"},
-          {prop:"remark",label:"备注",type:"normal"},
-        ]
-      },
       tableData:{
         type:Array,
         default:[
@@ -101,10 +108,21 @@
           {date:"2019-01-01",roleName:"管理员",remark:"备注"},
         ]
       },
-      export:{
-        type:Boolean,
-        data:false
+      tableHeader:{
+        type:Array,
+        default:[
+          {prop:'',label:'',type:"selection"},
+          {prop:"date",label:"创建时间",type:"normal"},
+          {prop:"roleName",label:"角色名称",type:"normal"},
+          {prop:"remark",label:"备注",type:"normal"},
+          {type:'operation',label:'操作'},
+        ]
       },
+      tableHeight:{
+        type:String,
+        default:600
+      },
+
       placeholder:{
         type:String,
         default:"请输入名称"
@@ -116,7 +134,43 @@
       buttonShow:{
         type:Boolean,
         default:true
-      }
+      },
+      pageSize:{
+        type:Number,
+        default:10
+      },
+      pageIndex:{
+        type:Number,
+        default:1
+      },
+      currentPage:{
+        type:Number,
+        default:1
+      },
+      ExportName:{
+        type:String,
+        default:"测试表导出"
+      },
+      typeNum:{//计算出来需要合并的列
+        type:Array,
+        default:[]
+      },
+      colspanIndex:{
+        type:Number,
+        default:""
+      },
+      exports:{//是否开启导出
+        type:Boolean,
+        data:false
+      },
+      merge:{//是否开启合并
+        type:Boolean,
+        default:false
+      },
+      operation:{//是否开启行内编辑
+        type:Boolean,
+        default:false
+      },
     },
     methods:{
       handleSizeChange(){
@@ -131,6 +185,58 @@
       handleSelectionChange(val) {
         this.multipleSelection = val;
       },
+      primary(){
+        this.loading=true;
+        setTimeout(()=>{
+          this.loading=false
+        },500)
+      },
+      /**
+       * 导出
+       * @param tableData 全部导出数据
+       * @param multipleSelection 单选导出数据
+       */
+      exportExcel(tableData,multipleSelection){
+        let tableDatas=[];
+        if(multipleSelection.length>0){
+          tableDatas=multipleSelection
+        }else{
+          tableDatas=tableData
+        }
+        require.ensure([], () => {
+          const { export_json_to_excel } = require('../../vendor/Export2Excel');
+          const tHeader=[],filterVal=[];
+          $.each(this.tableHeader,(v,item)=>{
+            if(item.label){
+              tHeader.push(item.label);
+              filterVal.push(item.prop);
+            }
+          });
+          const list = tableDatas;
+          const data = this.formatJson(filterVal, list);
+          export_json_to_excel(tHeader, data,this.ExportName);
+        })
+      },
+      formatJson(filterVal, jsonData){
+        return jsonData.map(v => filterVal.map(j => v[j]))
+      },
+      /**
+       * 合并单元格
+       * @param row
+       * @param column
+       * @param rowIndex
+       * @param columnIndex
+       * @return {{colspan: Number, rowspan: Array / Number}}
+       */
+      objectSpanMethod({ row, column, rowIndex, columnIndex }){
+        const _row=this.typeNum[rowIndex];
+        if(columnIndex===this.colspanIndex){
+          return {
+            colspan:this.colspanIndex,
+            rowspan:_row
+          }
+        }
+      }
     },
     mounted(){
       setTimeout(()=>{

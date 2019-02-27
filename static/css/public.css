@@ -31,12 +31,15 @@ label{
   background: linear-gradient(to top, #dbdada 0%,#E5E5E5 10%, #efeeee 100%,#ffffff)
 }
 .table-footer{
-  min-height: 44px;
+  height: 44px;
   box-sizing: border-box;
   padding: 8px 10px;
 }
 .table-choice{
   float: left;
+  font-size: 13px;
+  line-height: 28px;
+  margin-left: 10px;
 }
 
 
@@ -47,4 +50,16 @@ label{
 .el-pagination{
   float: left;
   padding: 0!important;
+}
+
+
+
+/**饿了么自定义样式**/
+.el-icon-button{
+  color: #333;
+  font-size: 14px;
+  margin-left: 0;
+}
+.el-icon-button span{
+  margin-left: 5px!important;
 }
