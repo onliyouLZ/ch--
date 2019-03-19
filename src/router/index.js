@@ -9,7 +9,7 @@ export default new Router({
   routes: [
     {
       path: '/',
-      redirect: '/dashboard'
+      redirect: '/login'
     },
     {
       path: '/',
@@ -24,11 +24,6 @@ export default new Router({
           path: '/role',
           component: resolve => require(['../components/page/role.vue'], resolve),
           meta: { title: '角色管理',permission:true}
-        },
-        {
-          path: '/table',
-          component: resolve => require(['../components/common/tableNormal.vue'], resolve),
-          meta: { title: '表格组件',permission:true}
         },
       ]
     },

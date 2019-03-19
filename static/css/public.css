@@ -52,6 +52,30 @@ label{
   padding: 0!important;
 }
 
+.el-dialog__wrapper .el-dialog{
+  width: 50%;
+  position: absolute;
+  margin-top: 0!important;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  border-radius: 5px;
+}
+
+.el-dialog__wrapper .el-dialog .el-dialog__header{
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
+  background-color: #00a0e9;
+  padding: 5px 10px;
+}
+.el-dialog__wrapper .el-dialog .el-dialog__header .el-dialog__headerbtn{
+  top: 10px!important;
+}
+.el-dialog__wrapper .el-dialog .el-dialog__header .el-dialog__headerbtn .el-dialog__close{
+  color: #404040;
+}
+
+
 
 
 /**饿了么自定义样式**/

@@ -23,14 +23,15 @@ a {
 
 .content-box {
     position: absolute;
-    left: 250px;
+    left: 200px;
     right: 0;
     top: 70px;
     bottom: 0;
-    padding-bottom: 30px;
+    /*padding-bottom: 10px;*/
     -webkit-transition: left .3s ease-in-out;
     transition: left .3s ease-in-out;
     background: #f0f0f0;
+    box-sizing: border-box;
 }
 
 .content {
