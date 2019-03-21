@@ -20,7 +20,8 @@
             :table-data="tableData"
             :table-header="tableHeader"
             :modal-append-to-body="bodyFalse"
-            @checkMulti="SelectionChange"
+            :operation="operation"
+            @redact="redact"
             @pageLoading="pageLoading">
           </table-normal>
         </el-card>
@@ -79,10 +80,12 @@
           {prop:"date",label:"创建时间",type:"normal"},
           {prop:"roleName",label:"角色名称",type:"normal"},
           {prop:"remark",label:"备注",type:"normal"},
+          {prop:"operation",label:"操作",type:"operation"},
         ],
         multipleSelection:[],
         dialogVisible:false,
         bodyFalse:false,
+        operation:true,
         title:"",
         ruleForm:{
           roleName:"",
@@ -161,8 +164,8 @@
       formatJson(filterVal, jsonData){
         return jsonData.map(v => filterVal.map(j => v[j]))
       },
-      SelectionChange(data){
-        this.multipleSelection=data;
+      redact(data){
+        console.log(1);
       },
       pageLoading(data){
         this.loading=data;

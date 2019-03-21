@@ -65,6 +65,7 @@
             <template slot-scope="scope">
               <el-button
                 size="mini"
+                @click="redact"
               >编辑</el-button>
               <el-button
                 size="mini"
@@ -157,6 +158,13 @@
         type:Boolean,
         default:false
       },
+      redact:{
+        type:Function,
+        default:function () {
+          let _this=this;
+          return _this.$emit('redact',this.multipleSelection) //把选中的数据传递至父组件
+        }
+      }
     },
     methods:{
       handleSizeChange(val){
@@ -172,7 +180,7 @@
       },
       handleSelectionChange(val) {
         this.multipleSelection = val;
-        this.$emit('checkMulti',this.multipleSelection) //把选中的数据传递至父组件
+
       },
       // primary(){
       //   this.loading=true;
