@@ -70,6 +70,7 @@
               <el-button
                 size="mini"
                 type="danger"
+                @click="deleteRow(scope.$index, scope.row)"
               >删除</el-button>
             </template>
           </el-table-column>
@@ -165,16 +166,21 @@
       },
       handleCurrentChange(val){
         this.pageIndex = val;
-        this.$emit('pageLoading',true)
+        this.$emit('pageLoading',true);
       },
       rowClick(row, event, column){
         this.$refs.multipleTable.toggleRowSelection(row);
+        this.$emit('deleteRow',this.multipleTable);
       },
       handleSelectionChange(val) {
         this.multipleSelection = val;
+        this.$emit('deleteRow',this.multipleTable);
       },
       redact(index,row){
-        return this.$emit('redact',row)
+         this.$emit('redact',row)
+      },
+      deleteRow(index,row){
+         this.$emit('deleteRow',row)
       },
       // primary(){
       //   this.loading=true;

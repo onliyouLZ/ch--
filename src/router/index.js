@@ -25,6 +25,11 @@ export default new Router({
           component: resolve => require(['../components/page/role.vue'], resolve),
           meta: { title: '角色管理',permission:true}
         },
+        {
+          path: '/user',
+          component: resolve => require(['../components/page/user.vue'], resolve),
+          meta: { title: '用户管理',permission:true}
+        },
       ]
     },
     {
