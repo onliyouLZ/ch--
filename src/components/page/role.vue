@@ -164,9 +164,6 @@
       formatJson(filterVal, jsonData){
         return jsonData.map(v => filterVal.map(j => v[j]))
       },
-      redact(data){
-        console.log(1);
-      },
       pageLoading(data){
         this.loading=data;
         setTimeout(()=>{
@@ -176,6 +173,13 @@
       add(){
         this.title="角色新增";
         this.dialogVisible=true;
+      },
+      redact(data){
+        this.dialogVisible=true;
+        this.title="角色修改";
+        this.ruleForm.roleName=data.roleName;
+        this.ruleForm.date=data.date;
+        this.ruleForm.remark=data.remark;
       },
       submitForm(){
         const _this=this;
@@ -195,6 +199,7 @@
               _this.$message.success(msg);
               _this.loading=true;
               _this.dialogVisible=false;
+              this.search();
             })
           }
         })
@@ -211,7 +216,7 @@
           remark:'',
           date:"",
         };
-        this.search();
+
       }
     },
     mounted(){

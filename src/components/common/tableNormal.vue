@@ -65,7 +65,7 @@
             <template slot-scope="scope">
               <el-button
                 size="mini"
-                @click="redact"
+                @click="redact(scope.$index, scope.row)"
               >编辑</el-button>
               <el-button
                 size="mini"
@@ -104,7 +104,6 @@
         pageIndex:1, //当前显示第几页
         pageSize:10, //每页显示多少条
         currentPage:1, //前往多少页
-
       }
     },
     props:{
@@ -158,13 +157,6 @@
         type:Boolean,
         default:false
       },
-      redact:{
-        type:Function,
-        default:function () {
-          let _this=this;
-          return _this.$emit('redact',this.multipleSelection) //把选中的数据传递至父组件
-        }
-      }
     },
     methods:{
       handleSizeChange(val){
@@ -180,7 +172,9 @@
       },
       handleSelectionChange(val) {
         this.multipleSelection = val;
-
+      },
+      redact(index,row){
+        return this.$emit('redact',row)
       },
       // primary(){
       //   this.loading=true;
