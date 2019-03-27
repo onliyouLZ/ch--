@@ -20,6 +20,15 @@ a {
     text-decoration: none
 }
 
+.icon {
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.15em;
+  fill: currentColor;
+  overflow: hidden;
+  font-size: 70px;
+}
+
 
 .content-box {
     position: absolute;
@@ -75,6 +84,9 @@ a {
     background: #f6faff;
 }
 
+.mgb10{
+  margin-bottom: 10px;
+}
 .mgb20 {
     margin-bottom: 20px;
 }

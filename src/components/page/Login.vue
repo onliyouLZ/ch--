@@ -7,7 +7,7 @@
                     <el-input
                       v-model="loginForm.username"
                       placeholder="用户名"
-                      prefix-icon="iconfont icon-yonghuming">
+                      prefix-icon="iconfont icon-yonghutouxiang">
                     </el-input>
                 </el-form-item>
                 <el-form-item prop="password">
@@ -15,7 +15,7 @@
                       type="password"
                       placeholder="密码"
                       v-model="loginForm.password"
-                      prefix-icon="iconfont icon-mima1"
+                      prefix-icon="iconfont icon-mimasuo"
                       @keyup.enter.native="submitForm('loginForm')">
                     </el-input>
                 </el-form-item>
@@ -36,8 +36,8 @@
     data: function(){
         return {
           loginForm: {
-                username: '',
-                password: ''
+                username: 'admin',
+                password: '1'
             },
             rules: {
                 username: [

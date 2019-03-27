@@ -46,6 +46,7 @@ label{
 /**饿了么样式修改**/
 .el-card__body{
   box-sizing: border-box;
+  padding: 10px;
 }
 .el-pagination{
   float: left;

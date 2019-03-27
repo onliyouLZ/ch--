@@ -18,7 +18,7 @@ export default new Router({
         {
           path: '/dashboard',
           component: resolve => require(['../components/page/Dashboard.vue'], resolve),
-          meta: { title: '系统首页',permission:true}
+          meta: { title: '首页',permission:true}
         },
         {
           path: '/role',

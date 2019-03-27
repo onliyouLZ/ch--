@@ -14,7 +14,7 @@
           </div>
           <div class="table-button">
             <el-button type="text"  icon="fa  fa-plus" class="el-icon-button" @click="add">新增</el-button>
-            <el-button type="text"  icon="fa fa-trash-o" class="el-icon-button">删除</el-button>
+            <el-button type="text"  icon="fa fa-trash-o" class="el-icon-button" @click="deleteAll">删除</el-button>
           </div>
           <table-normal
             :table-data="tableData"
@@ -22,6 +22,7 @@
             :modal-append-to-body="bodyFalse"
             :operation="operation"
             @redact="redact"
+            @multiTable="multiTable"
             @deleteRow="deleteRow"
             @pageLoading="pageLoading">
           </table-normal>
@@ -184,28 +185,41 @@
         this.ruleForm.roleId=data.roleId;
         this.ruleForm.id=data.id;
       },
+      multiTable(data){
+        this.multipleSelection=data;
+      },
       deleteRow(data){
-        this.$confirm('确认删除?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.$http.delete('http://localhost:3000/users/'+data.id).then(res=>{
-            if(res.status===200){
+        if(data===true){
+          this.deleteAll();
+        }
+      },
+      deleteAll(){
+        if(this.multipleSelection.length>0){
+          this.$confirm('确认删除?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this.loading=true;
+            this.$http.delete('http://localhost:3000/users/'+this.multipleSelection[0].id).then(res=>{
               this.$message({
                 type: 'success',
                 message: '删除成功!'
               });
-              this.loading=true;
               this.search();
-            }
-          })
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
+            });
+          }).catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消删除'
+            });
           });
-        });
+        }else{
+          this.$message({
+            type: 'error',
+            message: '请选择需要删除的数据!'
+          });
+        }
       },
       submitForm(){
         const _this=this;
@@ -263,7 +277,7 @@
     },
     created(){
 
-    }
+    },
   }
 </script>
 

@@ -1,43 +1,13 @@
 <template>
-  <!--<div class="wh100" id="tableNormal"-->
-       <!--v-loading="loading"-->
-       <!--element-loading-text="加载中">-->
-    <!--<el-card class="box-card">-->
-      <!--<div slot="header" class="clearfix">-->
-        <!--<div class="card-header-titleCard">-->
-          <!--<label>{{inputName}}:</label>-->
-          <!--<el-input :placeholder="placeholder" v-model="inputValue" class="wh150"></el-input>-->
-        <!--</div>-->
-        <!--<div class="card-header-titleCard">-->
-          <!--<label>时间:</label>-->
-          <!--<el-date-picker-->
-            <!--v-model="times"-->
-            <!--type="datetimerange"-->
-            <!--range-separator="至"-->
-            <!--start-placeholder="开始日期"-->
-            <!--end-placeholder="结束日期">-->
-          <!--</el-date-picker>-->
-        <!--</div>-->
-        <!--<div class="card-header-titleCard">-->
-          <!--<el-button  type="primary" @click="primary">查询</el-button>-->
-          <!--<el-button  type="success" v-if="exports" @click="exportExcel(tableData,multipleSelection)">导出</el-button>-->
-        <!--</div>-->
-      <!--</div>-->
-      <!--<div class="table-button" v-show="buttonShow">-->
-        <!--<el-button type="text" class="el-icon-button" icon="fa  fa-plus">新增</el-button>-->
-        <!--<el-button type="text" class="el-icon-button" icon="fa fa-trash-o">删除</el-button>-->
-      <!--</div>-->
-      <!---->
-    <!--</el-card>-->
-  <!--</div>-->
   <div id="tableNormal">
     <el-table
       :data="tables"
-      border
+      :border="tableBorder"
       ref="multipleTable"
       style="width: 100%"
+      :show-header="showHeader"
       :height=tableHeight
-      @row-click="rowClick"
+      :stripe="showStripe"
       @selection-change="handleSelectionChange"
       header-cell-class-name="table-header-public"
       :span-method="merge===true ? objectSpanMethod:objectSpanMethod1">
@@ -77,7 +47,7 @@
         </template>
       </template>
     </el-table>
-    <div class="table-footer" v-if="tableData.length>0">
+    <div  class="table-footer" v-if="tableData.length>0 && showTableFooter===true">
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
@@ -98,10 +68,8 @@
     name:"tableNormal",
     data(){
       return{
-        inputValue:"",
         multipleSelection:[],
         loading:true,
-        times: [new Date().datePro('{%d-1}').formatDate('yyyy-MM-dd HH:ss:mm'), new Date().formatDate('yyyy-MM-dd HH:ss:mm')],
         pageIndex:1, //当前显示第几页
         pageSize:10, //每页显示多少条
         currentPage:1, //前往多少页
@@ -158,6 +126,22 @@
         type:Boolean,
         default:false
       },
+      tableBorder:{
+        type:Boolean,
+        default:true
+      },
+      showHeader:{
+        type:Boolean,
+        default:true
+      },
+      showStripe:{
+        type:Boolean,
+        default:false
+      },
+      showTableFooter:{
+        type:Boolean,
+        default:true
+      }
     },
     methods:{
       handleSizeChange(val){
@@ -168,51 +152,27 @@
         this.pageIndex = val;
         this.$emit('pageLoading',true);
       },
+      /**
+       * 行选中暂时去掉
+       */
       rowClick(row, event, column){
         this.$refs.multipleTable.toggleRowSelection(row);
-        this.$emit('deleteRow',this.multipleTable);
       },
       handleSelectionChange(val) {
         this.multipleSelection = val;
-        this.$emit('deleteRow',this.multipleTable);
+        this.$emit('multiTable',this.multipleSelection);
       },
       redact(index,row){
          this.$emit('redact',row)
       },
+      /**
+       * 行内删除
+       */
       deleteRow(index,row){
-         this.$emit('deleteRow',row)
+        this.$refs.multipleTable.toggleRowSelection(row);
+        this.$emit('multiTable',this.multipleSelection);
+        this.$emit('deleteRow',true)
       },
-      // primary(){
-      //   this.loading=true;
-      //   setTimeout(()=>{
-      //     this.loading=false
-      //   },500)
-      // },
-      // exportExcel(tableData,multipleSelection){
-      //   let tableDatas=[];
-      //   if(multipleSelection.length>0){
-      //     tableDatas=multipleSelection
-      //   }else{
-      //     tableDatas=tableData
-      //   }
-      //   require.ensure([], () => {
-      //     const { export_json_to_excel } = require('../../vendor/Export2Excel');
-      //     const tHeader=[],filterVal=[];
-      //     $.each(this.tableHeader,(v,item)=>{
-      //       if(item.label){
-      //         tHeader.push(item.label);
-      //         filterVal.push(item.prop);
-      //       }
-      //     });
-      //     const list = tableDatas;
-      //     const data = this.formatJson(filterVal, list);
-      //     export_json_to_excel(tHeader, data,this.ExportName);
-      //
-      //   })
-      // },
-      // formatJson(filterVal, jsonData){
-      //   return jsonData.map(v => filterVal.map(j => v[j]))
-      // },
       /**
        * 合并单元格
        * @param row
@@ -248,6 +208,7 @@
         return this.tableData.length
       },
     },
+
   }
 </script>
 
