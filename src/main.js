@@ -5,7 +5,9 @@ import App from './App'
 import router from './router'
 import store from './store'
 import axios from 'axios'
+import echarts from 'echarts'
 import $ from 'jquery'
+import './utils/echartsResizeHelper'
 
 import ElementUI from 'element-ui';
 import utlis from './utils/utils'
@@ -30,6 +32,7 @@ axios.defaults.withCredentials=true;//让ajax携带cookie
 
 
 Vue.prototype.$http = axios;
+Vue.prototype.$echarts=echarts
 
 
 

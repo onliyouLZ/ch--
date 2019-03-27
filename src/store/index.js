@@ -12,8 +12,10 @@ const store = new Vuex.Store({
   mutations: {
     LoginByUser(state, value){
       this.state.user=value;
-      localStorage.setItem("roleId",value.roleId);
-      localStorage.setItem("userName",value.name);
+      // localStorage.setItem("roleId",value.roleId);
+      localStorage.setItem("roleId",1);
+      // localStorage.setItem("userName",value.name);
+      localStorage.setItem("userName","admin");
     }
   },
 });

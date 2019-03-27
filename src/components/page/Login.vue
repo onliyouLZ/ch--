@@ -53,17 +53,20 @@
         submitForm(formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
-                  this.$http.get("http://localhost:3000/users?name="+this.loginForm.username).then(res=>{
-                    if(res.data.length>0){
-                      console.info("拉取用户信息成功",res.data);
-                      this.$store.commit("LoginByUser",res.data[0]); //store 存储 此处登录没有连接后台 连接后台后以便存储token
-                      this.$router.push('/dashboard');
-                      this.$message.success("登录成功");
-                    }else{
-                      this.$message.error("用户不存在");
-                      return false;
-                    }
-                  });
+                  // this.$http.get("http://localhost:3000/users?name="+this.loginForm.username).then(res=>{
+                  //   if(res.data.length>0){
+                  //     console.info("拉取用户信息成功",res.data);
+                  //     this.$store.commit("LoginByUser",res.data[0]); //store 存储 此处登录没有连接后台 连接后台后以便存储token
+                  //     this.$router.push('/dashboard');
+                  //     this.$message.success("登录成功");
+                  //   }else{
+                  //     this.$message.error("用户不存在");
+                  //     return false;
+                  //   }
+                  // });
+                  this.$store.commit("LoginByUser","admin");
+                  this.$router.push('/dashboard');
+                  this.$message.success("登录成功");
                 } else {
                   this.$message.error("登录失败");
                   return false;

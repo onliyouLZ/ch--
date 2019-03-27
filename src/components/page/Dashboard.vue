@@ -1,10 +1,10 @@
 <template>
     <div id="dashboard">
-        <el-row :gutter="20">
+        <el-row :gutter="10">
             <el-col :span="18">
               <el-row :gutter="10">
                 <el-col :span="8">
-                  <el-card shadow="hover" class="mgb20">
+                  <el-card shadow="hover" class="mgb10">
                     <img src="../../assets/1.png" class="image" style="height: 250px;width: 100%">
                     <div class="card-body">
                       <div class="card-header">
@@ -28,6 +28,12 @@
                         </div>
                       </div>
                     </div>
+                  </el-card>
+                  <el-card shadow="hover" class="mgb10">
+                    <div slot="header" class="clearfix">
+                      <span>开机台时</span>
+                    </div>
+                    <div id="boot_prod_chart" style="width: 100%;height:250px;" v-on-echart-resize></div>
                   </el-card>
                 </el-col>
                 <el-col :span="16">
@@ -63,7 +69,7 @@
                       </div>
                     </div>
                   </el-card>
-                  <el-card shadow="hover" class="mgb20">
+                  <el-card shadow="hover" class="mgb10">
                     <div slot="header" class="clearfix">
                       <span>任务列表</span>
                     </div>
@@ -77,22 +83,76 @@
                       :table-height="330">
                     </table-normal>
                   </el-card>
+                  <el-card shadow="hover" class="mgb10">
+                    <div slot="header" class="clearfix">
+                      <span>任务列表</span>
+                    </div>
+                    <table-normal
+                      :table-data="taskTableData"
+                      :table-header="taskTableHeader"
+                      :table-border="tableBorder"
+                      :show-header="showHeader"
+                      :show-stripe="showStripe"
+                      :show-table-footer="showTableFooter"
+                      :table-height="250">
+                    </table-normal>
+                  </el-card>
+                </el-col>
+                <el-col :span="24">
+                  <el-card shadow="hover" class="mgb10">
+                    <div slot="header" class="clearfix">
+                      <span>重要视频</span>
+                    </div>
+                    <div style="display: flex;height: 173px">
+                      <div style="flex: 1">
+                        <video height="100%" width="100%" src="../../assets/VID_20190328_002536.mp4" controls="controls"></video>
+                      </div>
+                      <div style="flex: 1">
+                        <video height="100%" width="100%" src="../../assets/VID_20190328_002536.mp4" controls="controls"></video>
+                      </div>
+                      <div style="flex: 1">
+                        <video height="100%" width="100%" src="../../assets/VID_20190328_002536.mp4" controls="controls"></video>
+                      </div>
+                      <div style="flex: 1">
+                        <video height="100%" width="100%" src="../../assets/VID_20190328_002536.mp4" controls="controls"></video>
+                      </div>
+                    </div>
+                  </el-card>
                 </el-col>
               </el-row>
 
             </el-col>
             <el-col :span="6">
-              <el-card shadow="hover">
-
+              <el-card shadow="hover" class="mgb10">
+                <div slot="header" class="clearfix">
+                  <span>{{new Date().formatDate('MM')}}月{{new Date().formatDate('dd')}}日&nbsp;&nbsp;周{{week}}</span>
+                </div>
+                <div id="weather-view-he"></div>
+              </el-card>
+              <el-card shadow="hover" class="mgb10">
+                <div slot="header" class="clearfix">
+                 <span>雨量</span>
+                </div>
+                <div id="rain_prod_chart" style="width: 100%;height:250px;" v-on-echart-resize></div>
+              </el-card>
+              <el-card shadow="hover" class="mgb10">
+                <div slot="header" class="clearfix">
+                  <span>水位</span>
+                </div>
+                <div id="water_prod_chart" style="width: 100%;height:400px;" v-on-echart-resize></div>
               </el-card>
             </el-col>
         </el-row>
     </div>
+
 </template>
+
+
 
 <script>
     import tableNormal from '../common/tableNormal'
     import Schart from 'vue-schart';
+    import echarts from 'echarts'
     import bus from '../common/bus';
     export default {
         name: 'dashboard',
@@ -125,8 +185,39 @@
           tableNormal
         },
         computed: {
-            role() {
-                return this.name === 'admin' ? '超级管理员' : '普通用户';
+          role() {
+              return this.name === 'admin' ? '超级管理员' : '普通用户';
+          },
+          week(){
+            let str = "";
+            let day=new Date().getDay()-1;
+              switch (day) {
+                case 0:
+                  str="一";
+                  break;
+                case 1:
+                  str="二";
+                  break;
+                case 2:
+                  str="三";
+                  break;
+                case 3:
+                  str="四";
+                  break;
+                case 4:
+                  str="五";
+                  break;
+                case 5:
+                  str="六";
+                  break;
+                case 6:
+                  str="七";
+                  break;
+                default:
+                  str="";
+                  break
+              };
+              return str
             }
         },
         created(){
@@ -139,12 +230,83 @@
             window.removeEventListener('resize', this.renderChart);
 
         },
-        methods: {
 
-        }
+        methods: {
+          init_charts(){
+            /**
+             * 雨量
+             */
+            let rain_prod_chart = this.$echarts.init(document.getElementById('rain_prod_chart'));
+            let rain_prod_chart_option={
+              xAxis: {
+                type: 'category',
+                data: ['13日', '14日', '15日', '16日', '17日']
+              },
+              yAxis: {
+                type: 'value'
+              },
+              series: [{
+                data: [120, 200, 150, 80, 70],
+                type: 'bar'
+              }]
+            };
+            rain_prod_chart.setOption(rain_prod_chart_option);
+
+            /**
+             * 开机台数
+             */
+            let boot_prod_chart = this.$echarts.init(document.getElementById('boot_prod_chart'));
+            let boot_prod_chart_option={
+              xAxis: {
+                type: 'category',
+                data: ['13日', '14日', '15日', '16日', '17日']
+              },
+              yAxis: {
+                type: 'value'
+              },
+              series: [{
+                data: [120, 200, 150, 80, 70],
+                type: 'bar'
+              }]
+            };
+            boot_prod_chart.setOption(boot_prod_chart_option);
+
+            /**
+             * 水位
+             */
+            let water_prod_chart = this.$echarts.init(document.getElementById('water_prod_chart'));
+            let water_prod_chart_option={
+              xAxis: {
+                type: 'category',
+                data: ['13日', '14日', '15日', '16日', '17日']
+              },
+              yAxis: {
+                type: 'value'
+              },
+              series: [{
+                data: [120, 200, 150, 80, 70],
+                type: 'bar'
+              }]
+            };
+            water_prod_chart.setOption(water_prod_chart_option);
+          },
+          getWeather(){
+            let oHead = document.getElementById('weather-view-he');
+            let oScript= document.createElement("script");
+            oScript.type = "text/javascript";
+            oScript.src="https://apip.weatherdt.com/view/static/js/r.js?v=1111";
+            oHead.appendChild( oScript);
+          }
+        },
+      mounted() {
+        this.getWeather();
+        this.init_charts();
+      }
     }
 
 </script>
+
+
 
 
 <style scoped>
@@ -193,5 +355,19 @@
 }
 #dashboard  .card-two .c-t-item .c-t-i-n{
   font-size: 30px;
+}
+
+
+
+</style>
+<style>
+/**
+天气
+*/
+#dashboard #weather-view-he{
+  border: none!important;
+}
+#dashboard #weather-view-he .wv-v-h-copyright{
+  display: none;
 }
 </style>
