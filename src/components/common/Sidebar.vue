@@ -1,38 +1,49 @@
 <template>
     <div class="sidebar">
-        <el-menu class="sidebar-el-menu" :default-active="$route.path" :collapse="collapse" background-color="#324157"
-            text-color="#bfcbd9" active-text-color="#20a0ff" unique-opened router>
-            <template v-for="item in items">
-              <el-menu-item :index="item.path" :key="item.path">
-                <i class="iconfont icon-zhuye"></i>
+        <el-menu class="sidebar-el-menu" :default-active="onRoutes"  background-color="#324157"
+          text-color="#bfcbd9" active-text-color="#20a0ff"  router>
+            <template v-for="(item,index) in items">
+              <el-menu-item v-if="item.children.length === 0" :index="item.path" :key="item.path" >
+                <i class="iconfont" :class="item.meta.icon"></i>
                 <span slot="title">{{ item.meta.title }}</span>
               </el-menu-item>
+               <el-submenu  v-if="item.children.length >= 1" :index="item.path">
+                  <template slot="title">
+                    <i class="iconfont" :class="item.meta.icon"></i>
+                    <span>{{ item.meta.title }}</span>
+                  </template>
+                 <template v-for="(child,index) in item.children">
+                    <el-menu-item :index="child.path" :key="child.path">{{child.meta.title}}</el-menu-item>
+                 </template>
+                </el-submenu>
             </template>
         </el-menu>
     </div>
 </template>
 
 <script>
-    import bus from '../common/bus';
-    export default {
-        data() {
-            return {
-                collapse: false,
-                items:this.$router.options.routes[1].children
-            }
-        },
-        computed:{
-          onRoutes(){
-              return this.$route.path.replace('/','');
-          }
-      },
-        created(){
-            // 通过 Event Bus 进行组件间通信，来折叠侧边栏
-            bus.$on('collapse', msg => {
-                this.collapse = msg;
-            })
+  export default {
+    data() {
+        return {
+            collapse: false,
+            items:global.antRouter[0].children
         }
+    },
+    computed:{
+      onRoutes(){
+          return this.$route.path.replace('/','');
+      }
+    },
+    methods:{
+
+    },
+    mounted(){
+
+    },
+    created(){
+
     }
+  }
 </script>
 
 <style scoped>
@@ -43,6 +54,7 @@
         top: 70px;
         bottom:0;
         overflow-y: scroll;
+        height: 100%;
     }
     .sidebar::-webkit-scrollbar{
         width: 0;

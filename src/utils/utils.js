@@ -1,3 +1,6 @@
+import $ from "jquery";
+import store from '../store'
+
 let time = {
     //获取当前时间 格式为 yyyy-mm-dd h:min
     getNowTime() {
@@ -772,7 +775,7 @@ export function checkFileExt (ext) {
     return false;
   }
   return true;
-}
+};
 
 
 /**
@@ -791,7 +794,14 @@ export function sort(arr,item) {
       }
     }
   }
-}
+};
+
+
+
+
+
+global.antRouter = ''//全局的路由
+
 
 
 

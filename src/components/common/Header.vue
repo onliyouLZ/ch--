@@ -59,7 +59,8 @@
             handleCommand(command) {
                 if(command == 'loginout'){
                     localStorage.removeItem('roleId');
-                    // localStorage.removeItem('userName');
+                    localStorage.removeItem('userName');
+                    localStorage.removeItem('router');
                     this.$router.push('/login');
                 }
             },

@@ -162,6 +162,9 @@
         this.multipleSelection = val;
         this.$emit('multiTable',this.multipleSelection);
       },
+      /**
+       * 行内修改
+       */
       redact(index,row){
          this.$emit('redact',row)
       },

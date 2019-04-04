@@ -1,14 +1,14 @@
 <template>
   <div
-    id="user"
+    id="role"
     v-loading="loading"
     element-loading-text="数据加载中">
     <el-row :gutter="20">
       <el-col :span="24">
         <el-card class="box-card">
           <div slot="header" class="clearfix">
-            <label>用户名称:</label>
-            <el-input class="wh150" v-model="name" placeholder="请输入用户名称" @keyup.enter.native="primary"></el-input>
+            <label>角色名称:</label>
+            <el-input class="wh150" v-model="roleName" placeholder="请输入角色" @keyup.enter.native="primary"></el-input>
             <el-button type="primary" @click="primary">查询</el-button>
             <el-button type="success" @click="exportExcel(tableData,multipleSelection)">导出</el-button>
           </div>
@@ -37,21 +37,19 @@
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="120px" class="demo-ruleForm">
         <el-row :gutter="20">
           <el-col :span="24">
-            <el-form-item label="用户名称:" prop="name">
-              <el-input v-model="ruleForm.name"  placeholder="请输入用户名称"></el-input>
+            <el-form-item label="角色名称:" prop="roleName">
+              <el-input v-model="ruleForm.roleName"  placeholder="请输入角色名称"></el-input>
             </el-form-item>
-            <el-form-item label="分配角色:" prop="roleId">
-              <el-select style="width: 100%" v-model="ruleForm.roleId" placeholder="请选择角色">
-                <el-option
-                  v-for="item in options"
-                  :key="item.id"
-                  :label="item.roleName"
-                  :value="item.id">
-                </el-option>
-              </el-select>
+            <el-form-item label="创建时间:" prop="date">
+              <el-date-picker
+                v-model="ruleForm.date"
+                type="date"
+                placeholder="请选择日期"
+                style="width: 100%">
+              </el-date-picker>
             </el-form-item>
-            <el-form-item label="密码" prop="password">
-              <el-input type="password"  v-model="ruleForm.password" placeholder="请输入密码"></el-input>
+            <el-form-item label="备注" prop="remark">
+              <el-input  v-model="ruleForm.remark" placeholder="请输入备注"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="24" style="text-align: right">
@@ -68,51 +66,49 @@
 
 
 <script>
-  import tableNormal from '../common/tableNormal'
+  import tableNormal from '../../../common/tableNormal'
   export default{
-    name: "user",
+    name: "role",
     components:{
       tableNormal
     },
     data(){
       return{
         loading:true,
-        name:"",
+        roleName:"",
         tableData:[],
         tableHeader:[
           {data:'',title:'',type:"selection"},
-          {prop:"name",label:"用户名称",type:"normal"},
-          {prop:"password",label:"密码",type:"normal"},
+          {prop:"date",label:"创建时间",type:"normal"},
+          {prop:"roleName",label:"角色名称",type:"normal"},
+          {prop:"remark",label:"备注",type:"normal"},
           {prop:"operation",label:"操作",type:"operation"},
         ],
         multipleSelection:[],
         dialogVisible:false,
         bodyFalse:false,
         operation:true,
-        options:[],
         title:"",
         ruleForm:{
-          name:"",
-          password:'',
-          roleId:""
+          roleName:"",
+          remark:'',
+          date:"",
         },
         rules:{
-          name: [
-            { required: true, message: '用户名称不能为空', trigger: 'blur' },
+          roleName: [
+            { required: true, message: '角色名称不能为空', trigger: 'blur' },
             // { min: 3, max: 15, message: '长度在 3 到 15 个字符', trigger: 'blur' }
           ],
-          password:[
-            { required: true, message: '密码不能为空', trigger: 'blur' },
+          date:[
+            { required: true, message: '日期不能为空', trigger: 'blur' }
           ],
-          roleId:[
-            { required: true, message: '角色不能为空', trigger: 'change' }
-          ]
         },
+        multipleTable:[]
       }
     },
     methods:{
       search(){
-        this.$http.get("http://localhost:3000/users").then(res=>{
+        this.$http.get("http://localhost:3000/roles").then(res=>{
           if(res.status===200){
             let data=res.data;
             $.each(data,(v,item)=>{
@@ -127,16 +123,20 @@
       },
       primary(){
         this.loading=true;
-        let url="http://localhost:3000/users?name_like=";
-        if(this.name){
-          url="http://localhost:3000/users?name_like=";
+        let url="http://localhost:3000/roles?roleName_like=";
+        if(this.roleName){
+          url="http://localhost:3000/roles?roleName_like=";
         }else{
-          url="http://localhost:3000/users";
+          url="http://localhost:3000/roles";
         }
-        this.$http.get(url+this.name).then(res=>{
+        this.$http.get(url+this.roleName).then(res=>{
+          console.log(res);
           if(res.status===200){
             let data=res.data;
             setTimeout(()=>{
+              $.each(data,(v,item)=>{
+                item.date=new Date(item.date).formatDate('yyyy-MM-dd')
+              });
               this.tableData=data;
               this.loading=false;
             },500)
@@ -151,7 +151,7 @@
           tableDatas=tableData
         }
         require.ensure([], () => {
-          const { export_json_to_excel } = require('../../vendor/Export2Excel');
+          const { export_json_to_excel } = require('../../../../vendor/Export2Excel');
           const tHeader=[],filterVal=[];
           $.each(this.tableHeader,(v,item)=>{
             if(item.label){
@@ -174,24 +174,19 @@
         },500)
       },
       add(){
-        this.title="用户新增";
+        this.title="角色新增";
         this.dialogVisible=true;
       },
       redact(data){
         this.dialogVisible=true;
-        this.title="用户修改";
-        this.ruleForm.name=data.name;
-        this.ruleForm.password=data.password;
-        this.ruleForm.roleId=data.roleId;
+        this.title="角色修改";
+        this.ruleForm.roleName=data.roleName;
+        this.ruleForm.date=data.date;
+        this.ruleForm.remark=data.remark;
         this.ruleForm.id=data.id;
       },
       multiTable(data){
         this.multipleSelection=data;
-      },
-      deleteRow(data){
-        if(data===true){
-          this.deleteAll();
-        }
       },
       deleteAll(){
         if(this.multipleSelection.length>0){
@@ -201,7 +196,7 @@
             type: 'warning'
           }).then(() => {
             this.loading=true;
-            this.$http.delete('http://localhost:3000/users/'+this.multipleSelection[0].id).then(res=>{
+            this.$http.delete('http://localhost:3000/roles/'+this.multipleSelection[0].id).then(res=>{
               this.$message({
                 type: 'success',
                 message: '删除成功!'
@@ -221,13 +216,18 @@
           });
         }
       },
+      deleteRow(data){
+        if(data===true){
+          this.deleteAll();
+        }
+      },
       submitForm(){
         const _this=this;
         _this.$refs['ruleForm'].validate((valid)=>{
           if(valid){
             let url,msg,msg1;
-            if(_this.title==="用户新增"){
-              url="http://localhost:3000/users";
+            if(_this.title==="角色新增"){
+              url="http://localhost:3000/roles";
               msg="新增成功";
               msg1="新增失败";
               _this.$http.post(url,_this.ruleForm).then(res=>{
@@ -237,7 +237,7 @@
                 this.search();
               })
             }else{
-              url="http://localhost:3000/users/"+this.ruleForm.id;
+              url="http://localhost:3000/roles/"+this.ruleForm.id;
               msg="修改成功";
               msg1="修改失败";
               _this.$http.patch(url,_this.ruleForm).then(res=>{
@@ -259,30 +259,24 @@
         this.$refs[ruleForm].resetFields();
         // this.$refs.multipleTable.clearSelection();
         this.ruleForm={
-          name:"",
-          password:"",
-          roleId:""
+          roleName:"",
+          remark:'',
+          date:"",
         };
 
       }
     },
     mounted(){
       this.search();
-      this.$http.get('http://localhost:3000/roles').then(res=>{
-        if(res.status===200){
-          let data=res.data;
-          this.options = data;
-        }
-      })
     },
     created(){
 
-    },
+    }
   }
 </script>
 
 <style lang="less" scoped>
-  #user{
+  #role{
     width: 100%;
     height: 100%;
   }

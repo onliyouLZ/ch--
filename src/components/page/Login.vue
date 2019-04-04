@@ -32,6 +32,7 @@
 </template>
 
 <script>
+  import router from '../../router'
   export default {
     data: function(){
         return {
@@ -50,29 +51,52 @@
         }
     },
     methods: {
-        submitForm(formName) {
-            this.$refs[formName].validate((valid) => {
-                if (valid) {
-                  // this.$http.get("http://localhost:3000/users?name="+this.loginForm.username).then(res=>{
-                  //   if(res.data.length>0){
-                  //     console.info("拉取用户信息成功",res.data);
-                  //     this.$store.commit("LoginByUser",res.data[0]); //store 存储 此处登录没有连接后台 连接后台后以便存储token
-                  //     this.$router.push('/dashboard');
-                  //     this.$message.success("登录成功");
-                  //   }else{
-                  //     this.$message.error("用户不存在");
-                  //     return false;
-                  //   }
-                  // });
-                  this.$store.commit("LoginByUser","admin");
-                  this.$router.push('/dashboard');
-                  this.$message.success("登录成功");
-                } else {
-                  this.$message.error("登录失败");
-                  return false;
-                }
-            });
-        }
+      submitForm(formName) {
+          this.$refs[formName].validate((valid) => {
+              if (valid) {
+                this.$http.get("http://localhost:3000/users?name="+this.loginForm.username).then(res=>{
+                  if(res.data.length>0){
+                    console.info("拉取用户信息成功",res.data);
+                    this.$store.commit("LoginByUser",res.data[0]); //store 存储 此处登录没有连接后台 连接后台后以便存储token
+                    // this.$http.get('http://localhost:3000/menus?roleId='+res.data[0].roleId).then(res => {
+                    //   localStorage.setItem('router',JSON.stringify(res.data[0].menuList));
+                    //   let routers=this.filterAsyncRouter(res.data[0].menuList);
+                    //   router.addRoutes(routers); //动态添加路由
+                    //   global.antRouter = routers;//将路由数据传递给全局变量，做侧边栏菜单渲染工作
+                    // });
+                    this.$router.push('/');
+                    this.$message.success("登录成功");
+                  }else{
+                    this.$message.error("用户不存在");
+                    return false;
+                  }
+                });
+                // this.$store.commit("LoginByUser","admin");
+                // this.$router.push('/dashboard');
+                // this.$message.success("登录成功");
+              } else {
+                this.$message.error("登录失败");
+                return false;
+              }
+          });
+      },
+      filterAsyncRouter(asyncRouterMap) { //遍历后台传来的路由字符串，转换为组件对象
+        const accessedRouters = asyncRouterMap.filter(route => {
+          if (route.component) {
+            if (route.component === 'home') {//Layout组件特殊处理
+              route.component = home;
+            } else {
+              route.component = _import(route.component);
+            }
+          }
+          if (route.children && route.children.length) {
+            route.children = filterAsyncRouter(route.children)
+          }
+          return true
+        });
+
+        return accessedRouters
+      }
     },
 
   }
