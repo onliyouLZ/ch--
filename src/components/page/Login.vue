@@ -58,6 +58,7 @@
                   if(res.data.length>0){
                     console.info("拉取用户信息成功",res.data);
                     this.$store.commit("LoginByUser",res.data[0]); //store 存储 此处登录没有连接后台 连接后台后以便存储token
+
                     // this.$http.get('http://localhost:3000/menus?roleId='+res.data[0].roleId).then(res => {
                     //   localStorage.setItem('router',JSON.stringify(res.data[0].menuList));
                     //   let routers=this.filterAsyncRouter(res.data[0].menuList);

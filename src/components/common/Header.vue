@@ -61,6 +61,7 @@
                     localStorage.removeItem('roleId');
                     localStorage.removeItem('userName');
                     localStorage.removeItem('router');
+                    global.antRouter="";
                     this.$router.push('/login');
                 }
             },

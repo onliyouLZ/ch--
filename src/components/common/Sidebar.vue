@@ -26,7 +26,7 @@
     data() {
         return {
             collapse: false,
-            items:global.antRouter[0].children
+            items:[]
         }
     },
     computed:{
@@ -38,6 +38,10 @@
 
     },
     mounted(){
+      //菜单获取需要异步
+      setTimeout(()=>{
+        this.items=global.antRouter[0].children;
+      },0)
 
     },
     created(){
