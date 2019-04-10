@@ -123,6 +123,12 @@
               this.loading=false;
             },500)
           }
+        });
+        this.$http.get('http://localhost:3000/roles').then(res=>{
+          if(res.status===200){
+            let roleData=res.data;
+            this.options = roleData;
+          }
         })
       },
       primary(){
@@ -268,12 +274,6 @@
     },
     mounted(){
       this.search();
-      this.$http.get('http://localhost:3000/roles').then(res=>{
-        if(res.status===200){
-          let data=res.data;
-          this.options = data;
-        }
-      })
     },
     created(){
 

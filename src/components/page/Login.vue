@@ -58,13 +58,6 @@
                   if(res.data.length>0){
                     console.info("拉取用户信息成功",res.data);
                     this.$store.commit("LoginByUser",res.data[0]); //store 存储 此处登录没有连接后台 连接后台后以便存储token
-
-                    // this.$http.get('http://localhost:3000/menus?roleId='+res.data[0].roleId).then(res => {
-                    //   localStorage.setItem('router',JSON.stringify(res.data[0].menuList));
-                    //   let routers=this.filterAsyncRouter(res.data[0].menuList);
-                    //   router.addRoutes(routers); //动态添加路由
-                    //   global.antRouter = routers;//将路由数据传递给全局变量，做侧边栏菜单渲染工作
-                    // });
                     this.$router.push('/');
                     this.$message.success("登录成功");
                   }else{

@@ -21,14 +21,18 @@
             :table-header="tableHeader"
             :modal-append-to-body="bodyFalse"
             :operation="operation"
+            :showAccredit=true
             @redact="redact"
             @multiTable="multiTable"
             @deleteRow="deleteRow"
-            @pageLoading="pageLoading">
+            @pageLoading="pageLoading"
+            @accredit="accredit">
           </table-normal>
         </el-card>
       </el-col>
     </el-row>
+
+    <!--新增及修改角色弹窗-->
     <el-dialog
       :title="title"
       :visible.sync="dialogVisible"
@@ -61,6 +65,34 @@
         </el-row>
       </el-form>
     </el-dialog>
+
+    <!--菜单弹窗-->
+    <el-dialog
+    title="菜单授权"
+    :visible.sync="dialogAccredit"
+    class="dialogAccredit"
+    width="20%">
+      <el-row :gutter="20">
+        <el-col :span="24">
+          <el-tree
+            :data="treeData"
+            show-checkbox
+            default-expand-all
+            node-key="id"
+            ref="tree"
+            :check-strictly="true"
+            @check-change="checkChange"
+            highlight-current
+            :default-checked-keys="checkData"
+            :props="defaultProps">
+          </el-tree>
+        </el-col>
+        <el-col :span="24" style="text-align: center;margin-top: 10px">
+          <el-button type="primary" @click="saveMenu">保存</el-button>
+          <el-button @click="cancelMenu">取消</el-button>
+        </el-col>
+      </el-row>
+    </el-dialog>
   </div>
 </template>
 
@@ -86,6 +118,7 @@
         ],
         multipleSelection:[],
         dialogVisible:false,
+        dialogAccredit:false,
         bodyFalse:false,
         operation:true,
         title:"",
@@ -103,10 +136,20 @@
             { required: true, message: '日期不能为空', trigger: 'blur' }
           ],
         },
-        multipleTable:[]
+        multipleTable:[],
+        treeData: [],
+        defaultProps:{
+          children: 'children',
+          label: 'label'
+        },
+        menuId:"",
+        menuData:[],
+        checkData:[],
+        treeObjArr:[]
       }
     },
     methods:{
+      //搜索
       search(){
         this.$http.get("http://localhost:3000/roles").then(res=>{
           if(res.status===200){
@@ -121,6 +164,7 @@
           }
         })
       },
+      //查询
       primary(){
         this.loading=true;
         let url="http://localhost:3000/roles?roleName_like=";
@@ -143,6 +187,7 @@
           }
         });
       },
+      //导出
       exportExcel(tableData,multipleSelection){
         let tableDatas=[];
         if(multipleSelection.length>0){
@@ -164,19 +209,23 @@
           export_json_to_excel(tHeader, data,"文档1");
         })
       },
+      //导出数据处理
       formatJson(filterVal, jsonData){
         return jsonData.map(v => filterVal.map(j => v[j]))
       },
+      //翻页loading
       pageLoading(data){
         this.loading=data;
         setTimeout(()=>{
           this.loading=false
         },500)
       },
+      //打开新增窗口
       add(){
         this.title="角色新增";
         this.dialogVisible=true;
       },
+      //打开修改窗口
       redact(data){
         this.dialogVisible=true;
         this.title="角色修改";
@@ -188,6 +237,7 @@
       multiTable(data){
         this.multipleSelection=data;
       },
+      //删除方法
       deleteAll(){
         if(this.multipleSelection.length>0){
           this.$confirm('确认删除?', '提示', {
@@ -216,11 +266,13 @@
           });
         }
       },
+      //行删除
       deleteRow(data){
         if(data===true){
           this.deleteAll();
         }
       },
+      //提交
       submitForm(){
         const _this=this;
         _this.$refs['ruleForm'].validate((valid)=>{
@@ -251,9 +303,11 @@
           }
         })
       },
+      //重置
       reset(){
         this.dialogVisible=false;
       },
+      //关闭新增修改窗口
       dialogClose(ruleForm){
         this.dialogVisible=false;
         this.$refs[ruleForm].resetFields();
@@ -264,10 +318,56 @@
           date:"",
         };
 
+      },
+      //打开菜单授权窗口
+      accredit(data){
+        const _this=this;
+        const result=[];
+        _this.dialogAccredit=true;
+        _this.roleId=data.id;
+        _this.$http.get('http://localhost:3000/menus/?roleId='+data.id).then(res=>{
+          if(res.status===200){
+            _this.menuData=res.data;
+            _this.menuId=res.data[0].id
+            _this.treeData=_this.menuData[0].menuList[0].children;
+            getCheckData(_this.treeData);
+            _this.checkData=result;
+          }
+        });
+        //获取已选中的菜单
+        function getCheckData(arr){
+          if(arr){
+            arr.forEach(item=>{
+              _this.treeObjArr.push(item);//获取到待处理的数组数据
+              item.hidden===false&&result.push(item.id);
+              if(item.children instanceof Array){
+                getCheckData(item.children)
+              }
+            })
+          };
+        }
+      },
+      //保存菜单
+      saveMenu(){
+        this.$http.patch('http://localhost:3000/menus/'+ this.menuId,this.menuData[0]).then(res=>{
+          if(res.status===200){
+            this.dialogAccredit=false;
+            this.$message.success("保存成功")
+          }
+        })
+      },
+      checkChange(data,node,child){
+        data.hidden=!data.hidden;
+
+      },
+      //取消保存
+      cancelMenu(){
+        this.dialogAccredit=false;
       }
     },
     mounted(){
       this.search();
+
     },
     created(){
 
@@ -279,5 +379,11 @@
   #role{
     width: 100%;
     height: 100%;
+  }
+
+</style>
+<style>
+  #role .dialogAccredit .el-dialog__body{
+    padding: 10px 50px;
   }
 </style>

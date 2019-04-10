@@ -35,6 +35,12 @@
             <template slot-scope="scope">
               <el-button
                 size="mini"
+                type="primary"
+                v-if="showAccredit===true"
+                @click="accredit(scope.$index, scope.row)"
+              >授权</el-button>
+              <el-button
+                size="mini"
                 @click="redact(scope.$index, scope.row)"
               >编辑</el-button>
               <el-button
@@ -141,6 +147,10 @@
       showTableFooter:{
         type:Boolean,
         default:true
+      },
+      showAccredit:{
+        type:Boolean,
+        default:false
       }
     },
     methods:{
@@ -167,6 +177,12 @@
        */
       redact(index,row){
          this.$emit('redact',row)
+      },
+      /**
+       * 授权
+       */
+      accredit(index,row){
+        this.$emit('accredit',row);
       },
       /**
        * 行内删除

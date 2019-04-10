@@ -5,9 +5,7 @@ import axios from "axios/index";
 Vue.use(Vuex);
 const store = new Vuex.Store({
   state: {
-    user: {
-
-    },
+    user: {},
     router:""
   },
   mutations: {
