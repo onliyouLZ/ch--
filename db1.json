@@ -1,0 +1,188 @@
+{
+  "users": [
+    {
+      "name": "admin",
+      "password": "123456",
+      "roleId": 1,
+      "id": 1
+    },
+    {
+      "name": "ddd",
+      "password": "123",
+      "roleId": 2,
+      "id": 2
+    },
+    {
+      "name": "555",
+      "password": "555",
+      "roleId": 1,
+      "id": 3
+    },
+    {
+      "name": "13",
+      "password": "3",
+      "roleId": 1,
+      "id": 4
+    }
+  ],
+  "roles": [
+    {
+      "id": 1,
+      "roleName": "管理员",
+      "remark": "3333",
+      "date": "2016-05-02"
+    },
+    {
+      "id": 2,
+      "roleName": "驾驶员",
+      "remark": "ddddd",
+      "date": "2016-05-02"
+    }
+  ],
+  "menus": [
+    {
+      "roleId": 1,
+      "id": 1,
+      "menuList": [
+        {
+          "path": "/",
+          "component": "home",
+          "redirect": "dashboard",
+          "children": [
+            {
+              "path": "/dashboard",
+              "component": "Dashboard",
+              "id": 1,
+              "label": "首页",
+              "hidden": false,
+              "disabled": true,
+              "meta": {
+                "title": "首页",
+                "icon": "icon-zhuye"
+              },
+              "children": []
+            },
+            {
+              "path": "/system",
+              "redirect": "role",
+              "id": 2,
+              "component": "system/system",
+              "label": "系统管理",
+              "hidden": false,
+              "meta": {
+                "title": "系统管理",
+                "icon": "icon-zhuye"
+              },
+              "children": [
+                {
+                  "path": "/role",
+                  "id": 3,
+                  "label": "角色管理",
+                  "hidden": false,
+                  "component": "system/page/role",
+                  "meta": {
+                    "title": "角色管理",
+                    "icon": "icon-zhuye"
+                  }
+                },
+                {
+                  "path": "/user",
+                  "id": 4,
+                  "label": "用户管理",
+                  "hidden": false,
+                  "component": "system/page/user",
+                  "meta": {
+                    "title": "用户管理",
+                    "icon": "icon-zhuye"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "path": "/403",
+          "component": "403",
+          "hidden": true
+        },
+        {
+          "path": "*",
+          "component": "404",
+          "hidden": true
+        }
+      ]
+    },
+    {
+      "roleId": 2,
+      "id": 2,
+      "menuList": [
+        {
+          "path": "/",
+          "component": "home",
+          "redirect": "dashboard",
+          "children": [
+            {
+              "path": "/dashboard",
+              "component": "Dashboard",
+              "id": 1,
+              "label": "首页",
+              "hidden": false,
+              "disabled": true,
+              "meta": {
+                "title": "首页",
+                "icon": "icon-zhuye"
+              },
+              "children": []
+            },
+            {
+              "path": "/system",
+              "redirect": "role",
+              "id": 2,
+              "component": "system/system",
+              "label": "系统管理",
+              "hidden": false,
+              "meta": {
+                "title": "系统管理",
+                "icon": "icon-zhuye"
+              },
+              "children": [
+                {
+                  "path": "/role",
+                  "id": 3,
+                  "label": "角色管理",
+                  "hidden": true,
+                  "component": "system/page/role",
+                  "meta": {
+                    "title": "角色管理",
+                    "icon": "icon-zhuye"
+                  }
+                },
+                {
+                  "path": "/user",
+                  "id": 4,
+                  "label": "用户管理",
+                  "hidden": false,
+                  "component": "system/page/user",
+                  "meta": {
+                    "title": "用户管理",
+                    "icon": "icon-zhuye"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "path": "/403",
+          "component": "403",
+          "hidden": true
+        },
+        {
+          "path": "*",
+          "component": "404",
+          "hidden": true
+        }
+      ]
+    }
+  ]
+}

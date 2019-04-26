@@ -112,7 +112,7 @@
     },
     methods:{
       search(){
-        this.$http.get("http://localhost:3000/users").then(res=>{
+        this.$http.get("users").then(res=>{
           if(res.status===200){
             let data=res.data;
             $.each(data,(v,item)=>{
@@ -124,7 +124,7 @@
             },500)
           }
         });
-        this.$http.get('http://localhost:3000/roles').then(res=>{
+        this.$http.get('roles').then(res=>{
           if(res.status===200){
             let roleData=res.data;
             this.options = roleData;
@@ -133,11 +133,11 @@
       },
       primary(){
         this.loading=true;
-        let url="http://localhost:3000/users?name_like=";
+        let url="users?name_like=";
         if(this.name){
-          url="http://localhost:3000/users?name_like=";
+          url="users?name_like=";
         }else{
-          url="http://localhost:3000/users";
+          url="users";
         }
         this.$http.get(url+this.name).then(res=>{
           if(res.status===200){
@@ -207,7 +207,7 @@
             type: 'warning'
           }).then(() => {
             this.loading=true;
-            this.$http.delete('http://localhost:3000/users/'+this.multipleSelection[0].id).then(res=>{
+            this.$http.delete('users/'+this.multipleSelection[0].id).then(res=>{
               this.$message({
                 type: 'success',
                 message: '删除成功!'
@@ -233,7 +233,7 @@
           if(valid){
             let url,msg,msg1;
             if(_this.title==="用户新增"){
-              url="http://localhost:3000/users";
+              url="users";
               msg="新增成功";
               msg1="新增失败";
               _this.$http.post(url,_this.ruleForm).then(res=>{
@@ -243,7 +243,7 @@
                 this.search();
               })
             }else{
-              url="http://localhost:3000/users/"+this.ruleForm.id;
+              url="users/"+this.ruleForm.id;
               msg="修改成功";
               msg1="修改失败";
               _this.$http.patch(url,_this.ruleForm).then(res=>{

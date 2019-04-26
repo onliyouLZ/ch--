@@ -151,7 +151,7 @@
     methods:{
       //搜索
       search(){
-        this.$http.get("http://localhost:3000/roles").then(res=>{
+        this.$http.get("roles").then(res=>{
           if(res.status===200){
             let data=res.data;
             $.each(data,(v,item)=>{
@@ -167,11 +167,11 @@
       //查询
       primary(){
         this.loading=true;
-        let url="http://localhost:3000/roles?roleName_like=";
+        let url="roles?roleName_like=";
         if(this.roleName){
-          url="http://localhost:3000/roles?roleName_like=";
+          url="roles?roleName_like=";
         }else{
-          url="http://localhost:3000/roles";
+          url="roles";
         }
         this.$http.get(url+this.roleName).then(res=>{
           console.log(res);
@@ -246,7 +246,7 @@
             type: 'warning'
           }).then(() => {
             this.loading=true;
-            this.$http.delete('http://localhost:3000/roles/'+this.multipleSelection[0].id).then(res=>{
+            this.$http.delete('roles/'+this.multipleSelection[0].id).then(res=>{
               this.$message({
                 type: 'success',
                 message: '删除成功!'
@@ -279,7 +279,7 @@
           if(valid){
             let url,msg,msg1;
             if(_this.title==="角色新增"){
-              url="http://localhost:3000/roles";
+              url="roles";
               msg="新增成功";
               msg1="新增失败";
               _this.$http.post(url,_this.ruleForm).then(res=>{
@@ -289,7 +289,7 @@
                 this.search();
               })
             }else{
-              url="http://localhost:3000/roles/"+this.ruleForm.id;
+              url="roles/"+this.ruleForm.id;
               msg="修改成功";
               msg1="修改失败";
               _this.$http.patch(url,_this.ruleForm).then(res=>{
@@ -325,7 +325,7 @@
         const result=[];
         _this.dialogAccredit=true;
         _this.roleId=data.id;
-        _this.$http.get('http://localhost:3000/menus/?roleId='+data.id).then(res=>{
+        _this.$http.get('menus/?roleId='+data.id).then(res=>{
           if(res.status===200){
             _this.menuData=res.data;
             _this.menuId=res.data[0].id
@@ -349,7 +349,7 @@
       },
       //保存菜单
       saveMenu(){
-        this.$http.patch('http://localhost:3000/menus/'+ this.menuId,this.menuData[0]).then(res=>{
+        this.$http.patch('menus/'+ this.menuId,this.menuData[0]).then(res=>{
           if(res.status===200){
             this.dialogAccredit=false;
             this.$message.success("保存成功")

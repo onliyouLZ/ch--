@@ -6,7 +6,7 @@ import store from './store'
 let getRouter //用来获取后台拿到的路由
 
 router.beforeEach((to, from, next) => {
-  let roleId = localStorage.getItem('roleId');
+  let roleId = sessionStorage.getItem('roleId');
   if(to.path=== '/login'){
     next();
     return
@@ -14,7 +14,7 @@ router.beforeEach((to, from, next) => {
     if(roleId){ //判断是否获取到用户id
       if(!global.antRouter){//判断是否存储在全局
         if(!localStorage.getItem('router')){//判断本地是否存储路由
-          axios.get('http://localhost:3000/menus?roleId='+roleId).then(res => {
+          axios.get('menus?roleId='+roleId).then(res => {
             getRouter = res.data[0].menuList;//后台拿到路由
             console.info("拉取菜单成功",getRouter);
             saveObjArr('router',getRouter);//存储在本地

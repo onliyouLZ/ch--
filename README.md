@@ -1,5 +1,5 @@
 # vue-manage-system #
-基于Vue.js 2.x系列 + Element UI 的后台管理系统解决方案。[线上地址](http://blog.gdfengshuo.com/example/work/)
+基于Vue.js 2.x系列 + Element UI 的后台管理系统解决方案。[线上地址](https://github.com/onliyouLZ/bengzhan.git)
 
 ## 项目引入插件 ##
 1.字体图标库 阿里巴巴矢量图库、Font Awesome 字体图标库 [线上地址](http://fontawesome.dashgame.com/)
@@ -9,7 +9,8 @@
 ## 功能 ##
 - [x] Element UI
 - [x] 登录/注销
-- [x] Dashboard
+- [x] 首页
+- [x] 用户/角色关联
 - [x] 权限测试
 - [x] 404 / 403
 
@@ -23,12 +24,15 @@
 	|           |-- bus.js           	 // Event Bus
 	|           |-- Header.vue           // 公共头部
 	|           |-- Home.vue           	 // 公共路由入口
+	|           |-- tableNormal.vue      // 表格组件
 	|           |-- Sidebar.vue          // 公共左边栏
 	|           |-- Tags.vue           	 // 页面切换标签组件
+	|           |-- treeTable.vue        // 树表格(没用)
 	|       |-- page                   	 // 主要路由页面
 	|           |-- 403.vue
 	|           |-- 404.vue
 	|           |-- DashBoard.vue        // 系统首页
+	|           |-- Login.vue            // 登录页面
 	|   |-- App.vue                      // 页面入口文件
 	|   |-- main.js                      // 程序入口文件，加载各种公共组件
 	|-- .babelrc                         // ES6语法编译配置
@@ -37,6 +41,7 @@
 	|-- index.html                       // 入口html文件
 	|-- package.json                     // 项目及工具的依赖配置文件
 	|-- README.md                        // 说明
+	|-- promission.js                    // 路由跳转监控
 
 
 ## 安装步骤 ##
@@ -56,52 +61,14 @@
 
 ## 组件使用说明与演示 ##
 
-### vue-schart ###
-vue.js封装sChart.js的图表组件。访问地址：[vue-schart](https://github.com/linxin/vue-schart)
-<p><a href="https://www.npmjs.com/package/vue-schart"><img src="https://img.shields.io/npm/dm/vue-schart.svg" alt="Downloads"></a></p>
+### echarts ###
+echarts 组件
+### echartsResizeHelper ###
+echarts自动伸缩大小 组件
 
-```html
-<template>
-    <div>
-        <schart  class="wrapper"
-				:canvasId="canvasId"
-				:type="type"
-				:data="data"
-				:options="options"
-		></schart>
-    </div>
-</template>
 
-<script>
-    import Schart from 'vue-schart';        // 导入Schart组件
-    export default {
-        data: function(){
-            return {
-                canvasId: 'myCanvas',       // canvas的id
-                type: 'bar',                // 图表类型
-                data: [
-                    {name: '2014', value: 1342},
-                    {name: '2015', value: 2123},
-                    {name: '2016', value: 1654},
-                    {name: '2017', value: 1795},
-                ],
-                options: {                  // 图表可选参数
-                    title: 'Total sales of stores in recent years'
-                }
-            }
-        },
-        components: {
-            Schart
-        }
-    }
-</script>
-<style>
-.wrapper{
-	width: 7rem;
-	height: 5rem;
-}
-</style>
-```
+
+
 
 ### element-ui ###
 一套基于vue.js2.0的桌面组件库。访问地址：[element](http://element.eleme.io/#/zh-CN/component/layout)
@@ -119,7 +86,7 @@ vue.js封装sChart.js的图表组件。访问地址：[vue-schart](https://githu
 
 第四步：卸载该组件。执行以下命令：
 
-	npm un ***** -S
+	npm uninstall ***** -S
 
 完成。
 

@@ -8,7 +8,7 @@
                     <img src="../../assets/1.png" class="image" style="height: 250px;width: 100%">
                     <div class="card-body">
                       <div class="card-header">
-                        <h4>东西湖白马泾泵站</h4>
+                        <h4>站区简介</h4>
                         <div>
                         东西湖区防洪排涝的重点工程。设计总装机1900kw(6*3200kw),设计流量160m³/s，设计净扬程8.66m,设计排涝标准为二十年一遇，一日暴雨一日排完,设计暴雨量为212.03mm ,受益面积为50.7万亩,工程总投资为3.78亿元。
                       </div>

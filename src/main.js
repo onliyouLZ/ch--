@@ -26,7 +26,7 @@ Vue.use(ElementUI, { size: 'small' });
  * @type {boolean}
  */
 axios.defaults.timeout = 5000;
-axios.defaults.baseURL ='';
+axios.defaults.baseURL ='http://192.168.0.191:3000/';
 axios.defaults.crossDomain=true; //支持跨域
 axios.defaults.withCredentials=true;//让ajax携带cookie
 

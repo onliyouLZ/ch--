@@ -6,5 +6,5 @@ export function login(username,password) {
     username:username,
     password:password
   };
-  return axios.get("http://localhost:3000/users?name="+param.username);
+  return axios.get("users?name="+param.username);
 }
