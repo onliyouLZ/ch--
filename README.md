@@ -1,5 +1,7 @@
 # vue-manage-system #
-基于Vue.js 2.x系列 + Element UI 的后台管理系统解决方案。[线上地址](https://github.com/onliyouLZ/bengzhan.git)
+基于Vue.js 2.x系列 + Element UI 的后台管理系统解决方案。
+由于该项目的权限设置是本地基于json-server模拟 所以需要全局安装json-server
+关于json-server[如何安装](https://www.cnblogs.com/fly_dragon/p/9150732.html)
 
 ## 项目引入插件 ##
 1.字体图标库 阿里巴巴矢量图库、Font Awesome 字体图标库 [线上地址](http://fontawesome.dashgame.com/)
